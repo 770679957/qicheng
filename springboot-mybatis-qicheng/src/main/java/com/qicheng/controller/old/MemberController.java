@@ -22,7 +22,7 @@ public class MemberController {
 	
 	
 	// ==JDBC_Start==============================================================================
-	private MemberDao dao;
+	private MemberDao dao = new MemberDao();;
 	
 	
 	// http://localhost:8080/insertMember?age=25&email=123456@qq.com&name=杨杨&password=1234356&profession=职业&question=问个问题&reallyName=真实姓名&result=答案	
@@ -30,7 +30,6 @@ public class MemberController {
 	@RequestMapping("/insertMember")
 	@ResponseBody
 	public ResponseEntity<ResultModel> insertMember(Member member,Model model) {
-		dao = new MemberDao();
 		Member formSelect = dao.selectMemberForm(member.getName());
 		if (formSelect == null || formSelect.equals("")) {
 			dao.insertMember(member);
@@ -46,11 +45,52 @@ public class MemberController {
 	@RequestMapping("/updateMember")
 	@ResponseBody
 	public ResponseEntity<ResultModel> updateMemberHead(Member member,Model model) {
-		dao = new MemberDao();
 		dao.updateMember(member);
 		return new ResponseEntity<>(ResultModel.ok(ResultStatus.UPDATE_SUCCESS), HttpStatus.OK);
 	}
+	
+	// http://localhost:8080/selectOneMemberHead?id=4
+	// 前台查询会员的属性 app使用
+	@RequestMapping("/selectOneMemberHead")
+	@ResponseBody
+	public ResponseEntity<ResultModel> selectOneMemberHead(Member member,Model model) {
+		member = dao.selectOneMember(Integer.valueOf(member.getId()));
+		return new ResponseEntity<>(ResultModel.ok(member), HttpStatus.OK);
+	}
  
+	// http://localhost:8080/selectOneMemberHead2?id=4
+	// 前台查询会员的属性 web使用
+	@RequestMapping("/selectOneMemberHead2")
+	@ResponseBody //web 页面不要此注解 return "-----";
+	public Member selectOneMemberHead2(Member member,Model model) {
+		member = dao.selectOneMember(Integer.valueOf(member.getId()));
+		return member;
+	}
+	
+	
+	@RequestMapping("/deleteMember")
+	@ResponseBody
+	public ResponseEntity<ResultModel> deleteMember(Member member,Model model) {
+		if (!dao.deleteMember(Integer.valueOf(member.getId()))) {
+			return new ResponseEntity<>(ResultModel.ok(ResultStatus.DELETE_SUCCESS), HttpStatus.OK);
+		}
+		return new ResponseEntity<>(ResultModel.ok(ResultStatus.DELETE_SUCCESS), HttpStatus.OK);
+	}
+	
+	
+	/*
+ 
+	// 删除操作
+	public ActionForward deleteMember(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		if (!dao.deleteMember(Integer.valueOf(request.getParameter("id")))) {
+			return mapping.findForward("deleteMember");
+		}
+		return selectMember(mapping, form, request, response);
+	}
+	 
+	 
+	 */
 	
 	
 	

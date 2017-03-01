@@ -7,7 +7,9 @@ package com.qicheng.config;
  */
 public enum ResultStatus {
     SUCCESS(100, "成功"),
+    FAIL(-100, "操作失败"),
     REGISTER_SUCCESS(100, "注册成功"),
+    DELETE_SUCCESS(100, "删除成功"),
     UPDATE_SUCCESS(100, "修改成功"),
     USERNAME_OR_PASSWORD_ERROR(-1001, "用户名或密码错误"),
     USER_YES_FOUND(-1002, "用户已存在"),
