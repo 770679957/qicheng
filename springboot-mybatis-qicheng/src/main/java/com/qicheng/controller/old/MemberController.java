@@ -67,7 +67,8 @@ public class MemberController {
 		return member;
 	}
 	
-	
+	// http://localhost:8080/deleteMember?id=4
+	// 删除操作
 	@RequestMapping("/deleteMember")
 	@ResponseBody
 	public ResponseEntity<ResultModel> deleteMember(Member member,Model model) {
