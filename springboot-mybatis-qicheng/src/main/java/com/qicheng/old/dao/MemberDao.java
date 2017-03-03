@@ -183,10 +183,10 @@ public class MemberDao {
         member.setPassword(rs.getString(3));
         member.setReallyName(rs.getString(4));
         member.setAge(Integer.valueOf(rs.getString(5)));
-        member.setProfession(rs.getString(6));
-        member.setEmail(rs.getString(7));
-        member.setQuestion(rs.getString(8));
-        member.setResult(rs.getString(9));
+        member.setEmail(rs.getString(6));
+        member.setQuestion(rs.getString(7));
+        member.setResult(rs.getString(8));
+        member.setProfession(rs.getString(9));
       }
     }
     catch (SQLException ex) {
