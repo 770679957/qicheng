@@ -25,7 +25,7 @@ public class MemberController {
 	private MemberDao dao = new MemberDao();;
 	
 	
-	// http://localhost:8080/insertMember?age=25&email=123456@qq.com&name=杨杨&password=1234356&profession=职业&question=问个问题&reallyName=真实姓名&result=答案	
+	// http://localhost:8080/insertMember?age=25&email=123456@qq.com&name=杨杨66&password=1234356&profession=职业&question=问个问题&reallyName=真实姓名&result=答案	
 	// 添加员工信息
 	@RequestMapping("/insertMember")
 	@ResponseBody
@@ -49,7 +49,7 @@ public class MemberController {
 		return new ResponseEntity<>(ResultModel.ok(ResultStatus.UPDATE_SUCCESS), HttpStatus.OK);
 	}
 	
-	// http://localhost:8080/selectOneMemberHead?id=4
+	// http://localhost:8080/selectOneMemberHead?id=5
 	// 前台查询会员的属性 app使用
 	@RequestMapping("/selectOneMemberHead")
 	@ResponseBody
