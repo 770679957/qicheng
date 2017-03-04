@@ -1,5 +1,9 @@
 package com.qicheng.controller.old;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,22 +27,6 @@ public class MemberController {
 	
 	// ==JDBC_Start==============================================================================
 	private MemberDao dao = new MemberDao();;
-	
-	
-	// http://localhost:8080/insertMember?age=25&email=123456@qq.com&name=杨杨66&password=1234356&profession=职业&question=问个问题&reallyName=真实姓名&result=答案	
-	// 添加员工信息
-	@RequestMapping("/insertMember")
-	@ResponseBody
-	public ResponseEntity<ResultModel> insertMember(Member member,Model model) {
-		Member formSelect = dao.selectMemberForm(member.getName());
-		if (formSelect == null || formSelect.equals("")) {
-			dao.insertMember(member);
-			return new ResponseEntity<>(ResultModel.ok(ResultStatus.REGISTER_SUCCESS), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(ResultModel.error(ResultStatus.USER_YES_FOUND), HttpStatus.ACCEPTED);
-		}
-		
-	}
 	
 	// http://localhost:8080/updateMember?id=4&age=25&email=123456@qq.com&name=杨杨2&password=1234356&profession=职业&question=问个问题&reallyName=真实姓名&result=答案
 	// 修改会员属性
@@ -75,34 +63,86 @@ public class MemberController {
 		if (!dao.deleteMember(Integer.valueOf(member.getId()))) {
 			return new ResponseEntity<>(ResultModel.ok(ResultStatus.DELETE_SUCCESS), HttpStatus.OK);
 		}
-		return new ResponseEntity<>(ResultModel.ok(ResultStatus.DELETE_SUCCESS), HttpStatus.OK);
+		return new ResponseEntity<>(ResultModel.ok(ResultStatus.FAIL), HttpStatus.OK);
 	}
 	
-	
-	/*
- 
-	// 删除操作
-	public ActionForward deleteMember(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-		if (!dao.deleteMember(Integer.valueOf(request.getParameter("id")))) {
-			return mapping.findForward("deleteMember");
-		}
-		return selectMember(mapping, form, request, response);
+	// http://localhost:8080/selectOneMember?id=5
+	// 查看会员详细信息
+	@RequestMapping("/selectOneMember")
+	@ResponseBody
+	public ResponseEntity<ResultModel> selectOneMember(Member member,Model model) {
+		Integer id = Integer.valueOf(member.getId());
+		member = dao.selectOneMember(id);
+		return new ResponseEntity<>(ResultModel.ok(member), HttpStatus.OK);
 	}
-	 
-	 
+	
+	// 查看会员信息 http://localhost:8080/selectMember?number=3
+	/**
+	 * 
+	 * @param number 每页条数
+	 * @param model
+	 * @return
 	 */
+	@RequestMapping("/selectMember")
+	@ResponseBody
+	public ResponseEntity<ResultModel> selectMember(String number,Model model) {
+		List list = dao.selectMember();
+		int pageNumber = list.size(); // 计算出有多少条记录
+		int maxPage = pageNumber; // 计算有多少页数
+		if (maxPage % 6 == 0) {
+			maxPage = maxPage / 6;
+		} else {
+			maxPage = maxPage / 6 + 1;
+		}
+		if (number == null) {
+			number = "0";
+		}
+		
+		Map<String,Object> map = new HashMap<>();
+		map.put("number",  String.valueOf(number));
+		map.put("maxPage",  String.valueOf(maxPage));
+		map.put("pageNumber",  String.valueOf(pageNumber));
+		map.put("list", list);
+		return new ResponseEntity<>(ResultModel.ok(map), HttpStatus.OK);
+	}
+	
+	// 会员登录 http://localhost:8080/checkMember?name=杨杨&password=1234356
+	// 会员登录 http://localhost:8080/checkMember?name=杨杨x&password=1234356
+	// 会员登录 http://localhost:8080/checkMember?name=杨杨&password=1234356x
+	@RequestMapping("/checkMember")
+	@ResponseBody
+	public ResponseEntity<ResultModel> checkMember(Member member,Model model) {
+		String name = member.getName();
+		Member memberDb = dao.selectMemberForm(name);
+		if (memberDb == null || memberDb.equals("")) {
+			return new ResponseEntity<>(ResultModel.error(ResultStatus.USER_NOT_FOUND), HttpStatus.OK);
+		} else if (!memberDb.getPassword().equals(member.getPassword().trim())) {
+			return new ResponseEntity<>(ResultModel.error(ResultStatus.USERNAME_OR_PASSWORD_ERROR), HttpStatus.OK);
+		}
+		return new ResponseEntity<>(ResultModel.ok(memberDb), HttpStatus.OK);
+	}
+		
 	
 	
-	
-	
-	
-	
-	
-	
+	// http://localhost:8080/insertMember?age=25&email=123456@qq.com&name=杨杨67&password=1234356&profession=职业&question=问个问题&reallyName=真实姓名&result=答案	
+	// 添加员工信息
+	@RequestMapping("/insertMember")
+	@ResponseBody
+	public ResponseEntity<ResultModel> insertMember(Member member,Model model) {
+		Member formSelect = dao.selectMemberForm(member.getName());
+		if (formSelect == null || formSelect.equals("")) {
+			dao.insertMember(member);
+			return new ResponseEntity<>(ResultModel.ok(ResultStatus.REGISTER_SUCCESS), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(ResultModel.error(ResultStatus.USER_YES_FOUND), HttpStatus.ACCEPTED);
+		}
+	}
 	
 	// ==JDBC_End==============================================================================
+
 	
+	
+	// ==MyBatis_Start=========================================================================
     @RequestMapping("/test")
     @ResponseBody
     public Member greeting(@RequestParam(value="action", required=false, defaultValue="0") String action, Model model) {
@@ -118,4 +158,5 @@ public class MemberController {
     	
     	return "";
     }
+ // ==MyBatis_End============================================================================
 }

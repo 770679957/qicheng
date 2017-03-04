@@ -13,7 +13,8 @@ public enum ResultStatus {
     UPDATE_SUCCESS(100, "修改成功"),
     USERNAME_OR_PASSWORD_ERROR(-1001, "用户名或密码错误"),
     USER_YES_FOUND(-1002, "用户已存在"),
-    USER_NOT_LOGIN(-1003, "用户未登录");
+    USER_NOT_LOGIN(-1003, "用户未登录"),
+    USER_NOT_FOUND(-1004, "用户不存在");
 
     /**
      * 返回码
