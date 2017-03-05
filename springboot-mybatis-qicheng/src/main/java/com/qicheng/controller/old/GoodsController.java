@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,7 +27,6 @@ import com.qicheng.model.ResultModel;
 import com.qicheng.old.dao.GoodsDao;
 import com.qicheng.old.dao.SmallTypeDao;
 import com.qicheng.old.model.Goods;
-import com.qicheng.old.model.SmallType;
 
 //商品的Action
 @Controller
@@ -47,7 +45,7 @@ public class GoodsController {
 	}
 	
 	// 特价商品
-	// http://localhost:8080/goodSelectOneHead?mark=1&number=1
+	// http://localhost:8080/goodSelectFreeHead?mark=1&number=1
 	@RequestMapping("/goodSelectFreeHead")
 	@ResponseBody
 	public ResponseEntity<ResultModel> goodSelectFreeHead(String mark,String number,Model model) {
@@ -196,7 +194,7 @@ public class GoodsController {
 	}
 	
 	// 按小类别商品信息查询
-	//http://localhost:8080/goodSelectSmall?
+	//http://localhost:8080/goodSelectSmall?small=1&number=1
 	@RequestMapping("/goodSelectSmall")
 	@ResponseBody	
 	public ResponseEntity<ResultModel> goodSelectSmall(String small,String number,Model model) {
@@ -222,7 +220,7 @@ public class GoodsController {
 	}
 	
 	// 按特价商品信息查询
-	//http://localhost:8080/goodSelectMark?number=1&mark=1
+	//http://localhost:8080/goodSelectMark?number=1&mark=0
 	@RequestMapping("/goodSelectMark")
 	@ResponseBody
 	public ResponseEntity<ResultModel> goodSelectMark(String number,String mark ,Model model) {
@@ -248,7 +246,7 @@ public class GoodsController {
 	}
 	
 	// 删除商品的操作
-	// http://localhost:8080/deleteGoods?id=1
+	// http://localhost:8080/deleteGoods?id=24
 	@RequestMapping("/deleteGoods")
 	@ResponseBody	
 	public ResponseEntity<ResultModel> deleteGoods(String id,Model model) {
@@ -264,59 +262,93 @@ public class GoodsController {
 		return new ResponseEntity<>(ResultModel.ok(dao.selectOneGoods(Integer.valueOf(id))), HttpStatus.OK);
 	}
 	
-	/**
+	
 	// 添加商品的信息
-	 *  Springboot 之 多文件上传 http://blog.csdn.net/zsl129/article/details/53020180
-	 * http://blog.csdn.net/zsl129/article/details/52906762?locationNum=11&fps=1
-	 * 
-	//http://localhost:8080/saveGoods?
-	@RequestMapping("/saveGoods")
-	@ResponseBody	
-	public ResponseEntity<ResultModel> saveGoods(Model model,HttpServletRequest request) {
-	public ActionForward saveGoods(ActionMapping mapping, ActionForm form, ,
-			HttpServletResponse response) throws Exception {
-		UploadFile uploadFile = new UploadFile();
-		GoodsForm goodsForm = (GoodsForm) form;
-
-		String dir = servlet.getServletContext().getRealPath("/goodsPicture");
-		FormFile formFile = goodsForm.getFormFile();
-		String getType = formFile.getFileName().substring(formFile.getFileName().lastIndexOf(".") + 1);
-		String result = "添加商品信息失败";
-		String imageType[] = { "JPG", "jpg", "gif", "bmp", "BMP" };
-		for (int ii = 0; ii < imageType.length; ii++) {
-			if (imageType[ii].equals(getType)) {
-
-				goodsForm.setBig(Integer.valueOf(request.getParameter("big")));
-				goodsForm.setSmall(Integer.valueOf(request.getParameter("small")));
-				goodsForm.setName(request.getParameter("name"));
-				goodsForm.setFrom(request.getParameter("from"));
-				goodsForm.setNowPrice(Float.valueOf(request.getParameter("nowPirce")));
-				goodsForm.setFreePrice(Float.valueOf(request.getParameter("freePirce")));
-				goodsForm.setIntroduce(request.getParameter("introduce"));
-
-				goodsForm.setPriture("goodsPicture/" + uploadFile.upload(dir, formFile));
-				dao.insertGoods(goodsForm);
-				result = "添加商品信息成功";
-			}
+    //获取上传的文件夹，具体路径参考application.properties中的配置
+    @Value("${web.upload-path-goodsPicture}")
+    private String uploadPath;
+	
+	// http://localhost:8080/saveGoods?big=1&small=1&name=1&from=1&nowPirce=1&freePirce=1&Pirce=1&introduce=1
+    // headimg 文件参数
+	@PostMapping(value = "saveGoods")
+    public ResponseEntity<ResultModel> index(HttpServletRequest request, @RequestParam("headimg")MultipartFile[] files) {
+		Goods goods = new Goods();
+		String dir = uploadPath;
+		if(files!=null && files.length>=1) {
+            BufferedOutputStream bw = null;
+            try {
+                String fileName = files[0].getOriginalFilename();
+                //判断是否有文件且是否为图片文件
+                if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && isImageFile(fileName)) {
+                    //创建输出文件对象
+                    //yyw   File outFile = new File(uploadPath + "/" + UUID.randomUUID().toString()+ getFileType(fileName));
+                   	File outFile = new File(uploadPath + File.separator + UUID.randomUUID().toString()+ getFileType(fileName));
+                    //拷贝文件到输出文件对象 
+                    FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
+                    //保存 商品信息
+    				goods.setBig(Integer.valueOf(request.getParameter("big")));
+    				goods.setSmall(Integer.valueOf(request.getParameter("small")));
+    				goods.setName(request.getParameter("name"));
+    				goods.setFrom(request.getParameter("from"));
+    				goods.setNowPrice(Float.valueOf(request.getParameter("nowPirce")));
+    				goods.setFreePrice(Float.valueOf(request.getParameter("freePirce")));
+    				goods.setIntroduce(request.getParameter("introduce"));
+    				//goods.setPriture("goodsPicture/" + uploadFile.upload(dir, formFile));
+    				goods.setPriture(uploadPath + fileName); //图片路径
+    				dao.insertGoods(goods);
+    				return new ResponseEntity<>(ResultModel.ok(ResultStatus.SUCCESS), HttpStatus.OK);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if(bw!=null) {bw.close();}
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 		}
-		request.setAttribute("result", result);
-		return mapping.findForward("goodsOperation");
-		return new ResponseEntity<>(ResultModel.ok(map), HttpStatus.OK);
+        return new ResponseEntity<>(ResultModel.ok(ResultStatus.FAIL), HttpStatus.OK);
 	}
-	
-	
+	    /**
+	     * 判断文件是否为图片文件
+	     * @param fileName
+	     * @return
+	     */
+	    private Boolean isImageFile(String fileName) {
+	        String [] img_type = new String[]{".jpg", ".jpeg", ".png", ".gif", ".bmp"};
+	        if(fileName==null) {return false;}
+	        fileName = fileName.toLowerCase();
+	        for(String type : img_type) {
+	            if(fileName.endsWith(type)) {return true;}
+	        }
+	        return false;
+	    }
+
+	    /**
+	     * 获取文件后缀名
+	     * @param fileName
+	     * @return
+	     */
+	    private String getFileType(String fileName) {
+	        if(fileName!=null && fileName.indexOf(".")>=0) {
+	            return fileName.substring(fileName.lastIndexOf("."), fileName.length());
+	        }
+	        return "";
+	    }
+	//======================================================
+	    
+	    
+	    /**
 	// 查询小类别的名称
 	//http://localhost:8080/selectSmallName?
 	@RequestMapping("/selectSmallName")
 	@ResponseBody	
-	public ResponseEntity<ResultModel> selectSmallName(,Model model) {
-	public ActionForward selectSmallName(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) {
-		request.setAttribute("bigId", request.getParameter("bigId"));
+	public ResponseEntity<ResultModel> selectSmallName(String bigId,Model model) {
+		model.addAttribute("bigId", bigId)
 		return mapping.findForward("goodForward");
 		return new ResponseEntity<>(ResultModel.ok(map), HttpStatus.OK);
-	}
-
+	
 	// 转向页面
 	//http://localhost:8080/?
 	@RequestMapping("/goodSelectNewHead")
@@ -329,7 +361,7 @@ public class GoodsController {
 	}
 */
 	// 全部查询信息
-	//http://localhost:8080/goodSelect?
+	//http://localhost:8080/goodSelect
 	@RequestMapping("/goodSelect")
 	@ResponseBody
 	public ResponseEntity<ResultModel> goodSelect(String number,Model model) {
@@ -352,10 +384,4 @@ public class GoodsController {
 		map.put("list", list);
 		return new ResponseEntity<>(ResultModel.ok(map), HttpStatus.OK);
 	}
-	
-	
-	
-	
-	
-	
 }

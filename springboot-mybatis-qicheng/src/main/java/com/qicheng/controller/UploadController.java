@@ -54,11 +54,12 @@ public class UploadController {
         if(files!=null && files.length>=1) {
             BufferedOutputStream bw = null;
             try {
-                String fileName = files[0].getOriginalFilename();
+                String fileName = files[0].getOriginalFilename(); //yyw备注：这里只保存一张图片，多张需要循环
                 //判断是否有文件且是否为图片文件
                 if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && isImageFile(fileName)) {
                     //创建输出文件对象
                     //yyw   File outFile = new File(uploadPath + "/" + UUID.randomUUID().toString()+ getFileType(fileName));
+                	//yyw 目录不存在，自动创建
                    	File outFile = new File(uploadPath + File.separator + UUID.randomUUID().toString()+ getFileType(fileName));
                     //拷贝文件到输出文件对象
                     FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);

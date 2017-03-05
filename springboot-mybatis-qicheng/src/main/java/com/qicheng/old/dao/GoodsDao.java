@@ -81,7 +81,8 @@ public class GoodsDao {
 //添加操作
   public void insertGoods(Goods form) {
     try {
-      ps = connection.prepareStatement("insert into tb_goods values (?,?,?,?,?,getDate(),?,?,?,?,?)");
+     // ps = connection.prepareStatement("insert into tb_goods values (?,?,?,?,?,getDate(),?,?,?,?,?)");
+      ps = connection.prepareStatement("insert into tb_goods(bigId,smallId,goodsName,goodsFrom,introduce,creaTime,nowPrice,freePrice,number,pirture,mark) values (?,?,?,?,?,now(),?,?,?,?,?)");
       ps.setInt(1, form.getBig().intValue());
       ps.setInt(2, form.getSmall().intValue());
       ps.setString(3, form.getName());
@@ -92,6 +93,7 @@ public class GoodsDao {
       ps.setInt(8, 0);
       ps.setString(9, form.getPriture());
       ps.setInt(10, 0);
+      System.out.println("yyw====================="+ps.toString());
       ps.executeUpdate();
       ps.close();
     }
