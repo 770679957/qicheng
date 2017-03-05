@@ -6,7 +6,7 @@ package com.qicheng.config;
  * @date 2015/7/15.
  */
 public enum ResultStatus {
-    SUCCESS(100, "成功"),
+    SUCCESS(100, "操作成功"),
     FAIL(-100, "操作失败"),
     REGISTER_SUCCESS(100, "注册成功"),
     DELETE_SUCCESS(100, "删除成功"),

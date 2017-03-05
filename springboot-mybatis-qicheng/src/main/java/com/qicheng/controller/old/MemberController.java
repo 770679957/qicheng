@@ -124,7 +124,7 @@ public class MemberController {
 		
 	
 	
-	// http://localhost:8080/insertMember?age=25&email=123456@qq.com&name=杨杨67&password=1234356&profession=职业&question=问个问题&reallyName=真实姓名&result=答案	
+	// http://localhost:8080/insertMember?age=25&email=123456@qq.com&name=杨杨610&password=1234356&profession=职业&question=问个问题&reallyName=真实姓名&result=答案	
 	// 添加员工信息
 	@RequestMapping("/insertMember")
 	@ResponseBody
