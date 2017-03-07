@@ -90,9 +90,10 @@ public class SmallTypeDao {
 	// 添加操作
 	public void insertSmall(SmallType form) {
 		try {
-			ps = connection.prepareStatement("insert into tb_smallType values (?,?,getDate())");
+			ps = connection.prepareStatement("insert into tb_smallType(bigId,smallName,creaTime) values (?,?,NOW())");
 			ps.setString(1, form.getBigId().toString());
 			ps.setString(2, form.getSmallName());
+			System.out.println("yyw========"+ps.toString());
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException ex) {
