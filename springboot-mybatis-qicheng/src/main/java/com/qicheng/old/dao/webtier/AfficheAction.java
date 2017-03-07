@@ -2,7 +2,7 @@ package com.qicheng.old.dao.webtier;
 
 import com.qicheng.old.dao.AfficheDao;
 
-//公告信息的Action
+//公告信息的Action 
 public class AfficheAction{
 	private AfficheDao dao = null;
 	private int action;

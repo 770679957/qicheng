@@ -32,7 +32,7 @@ public class AfficheDao {
     }
   }
 
-  //修改的方法
+  //修改的方法 
   public void updateAffiche(Affiche form) {
     try {
       ps = connection.prepareStatement("update tb_affiche set name=?,content=? where id=?");
@@ -49,9 +49,10 @@ public class AfficheDao {
 //添加的方法
   public void insertAffiche(Affiche form) {
     try {
-      ps = connection.prepareStatement("insert into tb_affiche values (?,?,getDate())");
+      ps = connection.prepareStatement("insert into tb_affiche(name,content,issueTime) values (?,?,now())");
       ps.setString(1, form.getName());
       ps.setString(2, form.getContent());
+      System.out.println("yyw======"+ps.toString());
       ps.executeUpdate();
       ps.close();
     }
