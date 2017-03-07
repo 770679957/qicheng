@@ -23,12 +23,12 @@ public class ManagerDao {
   //对管理员表的查询方法
   public void insertManager(Manager form) {
     try {
-
-      ps = connection.prepareStatement("insert into tb_manager values (?,?,?,?)");
+      ps = connection.prepareStatement("insert into tb_manager(account,password,name,sign) values (?,?,?,?)");
       ps.setString(1, form.getAccount());
       ps.setString(2, form.getPassword());
       ps.setString(3, form.getName());
       ps.setInt(4, 0);
+      System.out.println("yyw======="+ps.toString());
       ps.executeUpdate();
       ps.close();
     }
