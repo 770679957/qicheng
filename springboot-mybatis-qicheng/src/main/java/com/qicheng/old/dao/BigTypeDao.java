@@ -54,8 +54,9 @@ public class BigTypeDao {
   //添加操作
   public void insertBig(String name) {
     try {
-      ps = connection.prepareStatement("insert into tb_bigType values (?,getDate())");
+      ps = connection.prepareStatement("insert into tb_bigType(bigName,creaTime) values (?,now())");
       ps.setString(1, name);
+      System.out.println("yyw====="+ps.toString());
       ps.executeUpdate();
       ps.close();
     }
