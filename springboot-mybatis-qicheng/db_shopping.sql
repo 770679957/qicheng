@@ -11,7 +11,7 @@
  Target Server Version : 50717
  File Encoding         : utf-8
 
- Date: 03/08/2017 07:12:18 AM
+ Date: 03/09/2017 05:54:33 AM
 */
 
 SET NAMES utf8;
@@ -30,21 +30,15 @@ CREATE TABLE `tb_affiche` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
---  Records of `tb_affiche`
--- ----------------------------
-BEGIN;
-INSERT INTO `tb_affiche` VALUES ('2', '1', '2', '2017-03-08 07:08:08'), ('3', '1', '1', '2017-03-08 07:08:23'), ('4', '1', '1', '2017-03-08 07:08:26');
-COMMIT;
-
--- ----------------------------
 --  Table structure for `tb_bigType`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_bigType`;
 CREATE TABLE `tb_bigType` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `bigName` varchar(50) COLLATE utf8_bin DEFAULT NULL,
-  `creaTime` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  `creaTime` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 --  Table structure for `tb_goods`
@@ -63,25 +57,26 @@ CREATE TABLE `tb_goods` (
   `number` int(11) DEFAULT NULL,
   `pirture` varchar(10000) COLLATE utf8_bin DEFAULT NULL,
   `mark` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `bigId` (`bigId`),
+  KEY `smallId` (`smallId`),
+  KEY `bigId_2` (`bigId`),
+  KEY `smallId_2` (`smallId`),
+  KEY `bigId_3` (`bigId`),
+  KEY `smallId_3` (`smallId`),
+  CONSTRAINT `smallId` FOREIGN KEY (`smallId`) REFERENCES `tb_smallType` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- ----------------------------
---  Records of `tb_goods`
--- ----------------------------
-BEGIN;
-INSERT INTO `tb_goods` VALUES ('1', '1', '1', '1', '1', '11111', '2017-03-06 07:17:51', '1.00', '1.00', '0', '/Users/yangwei/Desktop/2017/upload/goodsPicture timg001.jpeg', '1'), ('21', '1', '1', '1', '1', '11111', '2017-03-06 05:41:59', '1.00', '1.00', '0', '/Users/yangwei/Desktop/2017/uploadtimg001.jpeg', '0'), ('22', '1', '1', '1', '1', '11111', '2017-03-06 06:49:02', '1.00', '1.00', '0', '/Users/yangwei/Desktop/2017/upload/goodsPicture timg001.jpeg', '0'), ('23', '1', '1', '1', '1', '11111', '2017-03-06 06:49:02', '1.00', '1.00', '0', '/Users/yangwei/Desktop/2017/upload/goodsPicture timg001.jpeg', '0');
-COMMIT;
 
 -- ----------------------------
 --  Table structure for `tb_link`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_link`;
 CREATE TABLE `tb_link` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `linkName` varchar(50) COLLATE utf8_bin DEFAULT NULL,
-  `linkAddress` varchar(50) COLLATE utf8_bin DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  `linkAddress` varchar(50) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 --  Table structure for `tb_manager`
@@ -97,18 +92,11 @@ CREATE TABLE `tb_manager` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
---  Records of `tb_manager`
--- ----------------------------
-BEGIN;
-INSERT INTO `tb_manager` VALUES ('1', '1', '1', '1', '1'), ('2', '2', '2', '2', '1'), ('3', '3', '1', '1', '0');
-COMMIT;
-
--- ----------------------------
 --  Table structure for `tb_member`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_member`;
 CREATE TABLE `tb_member` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) DEFAULT NULL,
   `name` varchar(50) COLLATE utf8_bin NOT NULL,
   `password` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `reallyName` varchar(50) COLLATE utf8_bin DEFAULT NULL,
@@ -117,22 +105,16 @@ CREATE TABLE `tb_member` (
   `question` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `result` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `profession` varchar(50) COLLATE utf8_bin DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- ----------------------------
---  Records of `tb_member`
--- ----------------------------
-BEGIN;
-INSERT INTO `tb_member` VALUES ('5', '杨杨', '1234356', '真实姓名', '25', '123456@qq.com', '问个问题', '答案', '职业'), ('6', '杨杨66', '1234356', '真实姓名', '25', '123456@qq.com', '问个问题', '答案', '职业'), ('7', '杨杨67', '1234356', '真实姓名', '25', '123456@qq.com', '问个问题', '答案', '职业'), ('8', '杨杨68', '1234356', '真实姓名', '25', '123456@qq.com', '问个问题', '答案', '职业'), ('9', '杨杨69', '1234356', '真实姓名', '25', '123456@qq.com', '问个问题', '答案', '职业'), ('10', '杨杨610', '1234356', '真实姓名', '25', '123456@qq.com', '问个问题', '答案', '职业');
-COMMIT;
+  PRIMARY KEY (`name`),
+  KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 --  Table structure for `tb_order`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_order`;
 CREATE TABLE `tb_order` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) DEFAULT NULL,
   `number` varchar(50) COLLATE utf8_bin NOT NULL,
   `name` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `reallyName` varchar(50) COLLATE utf8_bin DEFAULT NULL,
@@ -143,35 +125,31 @@ CREATE TABLE `tb_order` (
   `bz` varchar(10000) COLLATE utf8_bin DEFAULT NULL,
   `sign` int(11) DEFAULT NULL,
   `creaTime` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- ----------------------------
---  Records of `tb_order`
--- ----------------------------
-BEGIN;
-INSERT INTO `tb_order` VALUES ('1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '2017-03-07 03:56:25'), ('2', '2', '2', '2', '2', '2', '2', '2', '2', '1', '2017-03-07 06:19:52');
-COMMIT;
+  PRIMARY KEY (`number`),
+  KEY `number` (`number`),
+  KEY `name` (`name`),
+  KEY `name_2` (`name`),
+  KEY `name_3` (`name`),
+  KEY `name_4` (`name`),
+  KEY `name_5` (`name`),
+  CONSTRAINT `FK_name` FOREIGN KEY (`name`) REFERENCES `tb_member` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 --  Table structure for `tb_orderDetail`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_orderDetail`;
 CREATE TABLE `tb_orderDetail` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `orderNumber` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `goodsId` int(11) NOT NULL,
   `price` float DEFAULT NULL,
   `number` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- ----------------------------
---  Records of `tb_orderDetail`
--- ----------------------------
-BEGIN;
-INSERT INTO `tb_orderDetail` VALUES ('1', '1', '1', '1', '1'), ('2', '2', '2', '2', '2');
-COMMIT;
+  KEY `goodsId` (`goodsId`),
+  KEY `orderNumber` (`orderNumber`),
+  CONSTRAINT `FK1` FOREIGN KEY (`goodsId`) REFERENCES `tb_goods` (`id`),
+  CONSTRAINT `FK2` FOREIGN KEY (`orderNumber`) REFERENCES `tb_order` (`number`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 --  Table structure for `tb_smallType`
@@ -182,15 +160,16 @@ CREATE TABLE `tb_smallType` (
   `bigId` int(11) NOT NULL,
   `smallName` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `creaTime` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `bigId` (`bigId`),
+  KEY `bigId_2` (`bigId`),
+  KEY `bigId_3` (`bigId`),
+  KEY `bigId_4` (`bigId`),
+  KEY `bigId_5` (`bigId`),
+  KEY `bigId_6` (`bigId`),
+  KEY `bigId_7` (`bigId`),
+  CONSTRAINT `bigId` FOREIGN KEY (`bigId`) REFERENCES `tb_bigType` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- ----------------------------
---  Records of `tb_smallType`
--- ----------------------------
-BEGIN;
-INSERT INTO `tb_smallType` VALUES ('1', '1', '1', '2017-03-08 03:43:18'), ('3', '1', '1', '2017-03-08 03:43:48'), ('4', '1', '1', '2017-03-08 03:48:08');
-COMMIT;
 
 -- ----------------------------
 --  Table structure for `user`
@@ -205,13 +184,6 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
---  Records of `user`
--- ----------------------------
-BEGIN;
-INSERT INTO `user` VALUES ('1', '7player', '18', '123456');
-COMMIT;
-
--- ----------------------------
 --  Table structure for `user_`
 -- ----------------------------
 DROP TABLE IF EXISTS `user_`;
@@ -223,12 +195,5 @@ CREATE TABLE `user_` (
   PRIMARY KEY (`id_`),
   UNIQUE KEY `username_` (`username_`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- ----------------------------
---  Records of `user_`
--- ----------------------------
-BEGIN;
-INSERT INTO `user_` VALUES ('admin', 'password', '1', 'admin');
-COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
