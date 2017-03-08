@@ -2,11 +2,10 @@ package com.qicheng.old.dao.webtier;
 
 import com.qicheng.old.dao.LinkDao;
 
-//网站连接的Action
+//网站连接的Action 
 public class LinkAction{
-	private LinkDao dao = null;
-	private int action;
-/*
+	private LinkDao dao = new LinkDao();
+	/*
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws UnsupportedEncodingException {
 		this.action = Integer.parseInt(request.getParameter("action"));

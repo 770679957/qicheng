@@ -37,9 +37,10 @@ public class LinkDao {
 //添加的方法
   public void insertLink(Link form) {
     try {
-      ps = connection.prepareStatement("insert into tb_link values (?,?)");
+      ps = connection.prepareStatement("insert into tb_link(LinkName,LinkAddress) values (?,?)");
       ps.setString(1, form.getLinkName());
       ps.setString(2, form.getLinkAddress());
+      System.out.println("yyw===="+ps.toString());
       ps.executeUpdate();
       ps.close();
     }

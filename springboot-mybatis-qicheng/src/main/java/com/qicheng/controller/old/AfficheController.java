@@ -46,8 +46,6 @@ public class AfficheController {
 		return new ResponseEntity<>(ResultModel.ok(ResultStatus.UPDATE_SUCCESS), HttpStatus.OK);
 	}
 	
-	
-	
 	// 对公告信息的全部查询功能 http://localhost:8080/afficheSelect?number=1
 	@RequestMapping("/afficheSelect")
 	@ResponseBody
