@@ -26,7 +26,7 @@ public class MemberController {
 	
 	
 	// ==JDBC_Start==============================================================================
-	private MemberDao dao = new MemberDao();;
+	private MemberDao dao = new MemberDao();
 	
 	// http://localhost:8080/updateMember?id=4&age=25&email=123456@qq.com&name=杨杨2&password=1234356&profession=职业&question=问个问题&reallyName=真实姓名&result=答案
 	// 修改会员属性

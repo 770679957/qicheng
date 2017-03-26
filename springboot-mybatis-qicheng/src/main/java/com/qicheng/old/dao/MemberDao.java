@@ -104,7 +104,7 @@ public class MemberDao {
 //添加信息
   public void insertMember(Member form) {
     try { 
-      ps = connection.prepareStatement("insert into tb_member(name,password,reallyName,age,profession,email,question,result) values (?,?,?,?,?,?,?,?)");
+      ps = connection.prepareStatement("insert into tb_member(name,password,reallyName,age,profession,email,question,result,grade) values (?,?,?,?,?,?,?,?,?)");
       ps.setString(1, form.getName());
       ps.setString(2, form.getPassword());
       ps.setString(3, form.getReallyName());
@@ -113,6 +113,7 @@ public class MemberDao {
       ps.setString(6, form.getEmail());
       ps.setString(7, form.getQuestion());
       ps.setString(8, form.getResult());
+      ps.setString(9, form.getGrade());
       System.out.println("yyw====================="+ps.toString());
       ps.executeUpdate();
       ps.close();

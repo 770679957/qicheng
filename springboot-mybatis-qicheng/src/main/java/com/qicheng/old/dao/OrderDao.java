@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.Statement;
 import com.qicheng.old.model.Order;
 import com.qicheng.old.tool.JDBConnection;
 
@@ -144,9 +145,10 @@ public class OrderDao {
   }
 
 //添加的方法
-  public void insertOrderDetail(Order form) {
+  public Long insertOrder(Order form) {
     try {
-      ps = connection.prepareStatement("insert into tb_order values (?,?,?,?,?,?,?,?,?,getDate())");
+      //ps = connection.prepareStatement("insert into tb_order values (?,?,?,?,?,?,?,?,?,getDate())");
+      ps = connection.prepareStatement("insert into tb_order values (?,?,?,?,?,?,?,?,?,getDate())",Statement.RETURN_GENERATED_KEYS);
       ps.setString(1, form.getNumber());
       ps.setString(2, form.getName());
       ps.setString(3, form.getReallyName());
@@ -157,10 +159,18 @@ public class OrderDao {
       ps.setString(8, form.getBz());
       ps.setString(9, form.getSign());
       ps.executeUpdate();
-      ps.close();
+      //检索由于执行此 Statement 对象而创建的所有自动生成的键 
+      ResultSet rs = ps.getGeneratedKeys();
+      if (rs.next()) {
+		// 知其仅有一列，故获取第一列
+		Long id = rs.getLong(1);
+		System.out.println("-----静态SQL模式-----id = " + id);
+		return id;
+      }
+      	ps.close();
     }
-    catch (SQLException ex) {
-
+    	catch (SQLException ex) {
     }
+	return null;
   }
 }

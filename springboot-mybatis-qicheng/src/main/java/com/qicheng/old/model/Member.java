@@ -19,6 +19,26 @@ public class Member {
 	private String reallyName; // 真实姓名
 
 	private String result; // 找回密码的答案
+	
+	private String grade; //折扣表 id
+
+	public String getGrade() {
+		return grade;
+	}
+
+	public void setGrade(String grade) {
+		this.grade = grade;
+	}
+
+	private Double amount; // 消费金额
+
+	public Double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Double amount) {
+		this.amount = amount;
+	}
 
 	public Member() {
 	}
